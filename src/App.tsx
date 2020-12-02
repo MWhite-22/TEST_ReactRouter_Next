@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { makeStyles, Typography } from '@material-ui/core';
+import React, { Suspense } from 'react';
+import LoadingScreen from './LoadingScreen';
+import { Sidebar } from './Navbar';
+import { Router } from './routes';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const useStyles = makeStyles(() => ({
+	root: {
+		display: 'flex',
+		flexDirection: 'column',
+		width: '100vw',
+		height: '100vh',
+	},
+	title: {
+		marginTop: 0,
+		textAlign: 'center',
+		borderBottom: '1px solid black',
+	},
+	content: {
+		display: 'flex',
+	},
+	main: {
+		flexGrow: 1,
+		padding: '1rem',
+	},
+}));
 
-export default App;
+export const App: React.FC = () => {
+	const classes = useStyles();
+	return (
+		<div className={classes.root}>
+			<Typography variant='h1' className={classes.title}>
+				Hello World
+			</Typography>
+			<div className={classes.content}>
+				<Sidebar />
+				<main className={classes.main}>
+					<Suspense fallback={<LoadingScreen />}>
+						<Router />
+					</Suspense>
+				</main>
+			</div>
+		</div>
+	);
+};
