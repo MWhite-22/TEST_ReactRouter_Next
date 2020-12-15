@@ -65,7 +65,7 @@ export const NavRouteItem: React.FC<Props> = ({
 			<Button
 				disableRipple
 				style={style}
-				className={clsx(classes.buttonLeaf, `depth-${depth}`)}
+				className={`${classes.buttonLeaf} depth-${depth}`}
 				component={NavLink}
 				end={end}
 				to={path}

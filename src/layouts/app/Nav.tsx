@@ -55,7 +55,7 @@ export const Nav: React.FC<Props> = ({ navOpen, closeNav, title }) => {
 
 const useStyles = makeStyles((theme) => {
 	const expandedWidth = 200;
-	const collapsedWidth = theme.spacing(7);
+	const collapsedWidth = theme.spacing(5);
 
 	return {
 		drawer: {

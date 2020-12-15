@@ -4,6 +4,7 @@ import { matchPath, useLocation } from 'react-router-dom';
 import { List } from '@material-ui/core';
 import { useAuth } from '../../mocks/Auth';
 import { NavRouteItem } from './NavRouteListItem';
+import { Home, Person, QuestionAnswer } from '@material-ui/icons';
 
 interface NavItem {
 	title: string;
@@ -14,32 +15,55 @@ interface NavItem {
 	children?: NavItem[];
 }
 
+const routes: NavItem[] = [
+	{
+		title: 'Home',
+		path: '',
+		icon: Home,
+	},
+	{
+		title: 'About',
+		path: 'about',
+		icon: QuestionAnswer,
+	},
+	{
+		title: 'People',
+		path: 'person',
+		icon: Person,
+		children: [
+			{
+				title: 'People - All',
+				path: 'person',
+			},
+			{
+				title: 'People - One',
+				path: 'person/1234',
+			},
+			{
+				title: 'People - Me',
+				path: 'person/me',
+				end: false,
+			},
+		],
+	},
+	{
+		title: 'Error',
+		path: '/unknown',
+	},
+];
+
 export const NavRouteList: React.FC = () => {
 	const location = useLocation();
-
-	return <List component='nav'>{renderNavItems([], location.pathname)}</List>;
-};
-
-const renderNavItems = (items: NavItem[], currentPathname: string, depth: number = 0) => {
 	const { userPermissions } = useAuth();
 
-	// const RouterLink = useMemo(
-	// 	() =>
-	// 		React.forwardRef<HTMLAnchorElement, Omit<LinkProps, 'innerRef' | 'to'>>((props, ref) => (
-	// 			<NavLink to={path} innerRef={ref} exact={path === '/'} {...props} />
-	// 		)),
-	// 	[path]
-	// );
+	return (
+		<List disablePadding component='nav'>
+			{renderNavItems(routes, location.pathname, userPermissions)}
+		</List>
+	);
+};
 
-	// return (
-	// 	<ListItem button dense component={RouterLink} className={classes.listItem}>
-	// 		<ListItemIcon>
-	// 			<IconComponent />
-	// 		</ListItemIcon>
-	// 		<ListItemText primary={name} />
-	// 	</ListItem>
-	// );
-
+const renderNavItems = (items: NavItem[], currentPathname: string, permissions: string[], depth: number = 0) => {
 	return items.reduce((acc: JSX.Element[], navItem) => {
 		const key = navItem.title + depth;
 
@@ -57,7 +81,7 @@ const renderNavItems = (items: NavItem[], currentPathname: string, depth: number
 					depth={depth}
 					open={Boolean(open)}
 				>
-					{renderNavItems(navItem.children, currentPathname, depth + 1)}
+					{renderNavItems(navItem.children, currentPathname, permissions, depth + 1)}
 				</NavRouteItem>
 			);
 		} else {

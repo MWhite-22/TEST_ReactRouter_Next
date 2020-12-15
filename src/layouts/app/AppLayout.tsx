@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import { Header } from './Header';
 import { Nav } from './Nav';
 import { Footer } from './Footer';
+import { Outlet } from 'react-router-dom';
+import ErrorBoundary from '../../components/ErrorBoundary';
+import LoadingScreen from '../../LoadingScreen';
 
 //TODO: FRONTEND - CONSTANT FOR TITLE TEXT
-//TODO: UI - REPLACE TITL TEXT WITH LOGO IF PRESENT?
+//TODO: UI - REPLACE TITLE TEXT WITH LOGO IF PRESENT?
 
-interface Props {
-	children: React.ReactNode;
-}
-
-export const AppLayout: React.FC<Props> = ({ children }) => {
+export const AppLayout: React.FC = () => {
 	const classes = useStyles();
 	const [navOpen, setNavOpen] = useState<boolean>(false);
 
@@ -30,7 +29,13 @@ export const AppLayout: React.FC<Props> = ({ children }) => {
 			<Header title={navTitle} openNav={openNav} />
 			<div className={classes.flexMain}>
 				<Nav title={navTitle} navOpen={navOpen} closeNav={closeNav} />
-				<main className={classes.mainContent}>{children}</main>
+				<main className={classes.mainContent}>
+					<ErrorBoundary>
+						<Suspense fallback={<LoadingScreen />}>
+							<Outlet />
+						</Suspense>
+					</ErrorBoundary>
+				</main>
 			</div>
 			<Footer />
 		</div>

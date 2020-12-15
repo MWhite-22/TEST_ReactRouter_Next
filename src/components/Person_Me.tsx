@@ -1,3 +1,4 @@
+import { Divider } from '@material-ui/core';
 import React from 'react';
 import { Link, Outlet } from 'react-router-dom';
 
@@ -9,10 +10,8 @@ const PersonMe: React.FC = (props) => {
 		<>
 			<p>{`I am the ${routeName} route`}</p>
 			<Link to='details'>details</Link>
+			<Divider />
 			<Outlet />
-			<pre>
-				<code>{JSON.stringify(props, null, 2)}</code>
-			</pre>
 		</>
 	);
 };
